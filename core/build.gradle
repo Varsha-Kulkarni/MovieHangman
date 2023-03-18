@@ -1,0 +1,14 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    // Kotlin Stdlib
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    // Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

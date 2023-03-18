@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "Movie Hangman"
 include ':app'
 include ':data'
+include ':core'
+include ':repository'
