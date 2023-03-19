@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Movie Hangman</string>
+    <string name="score">Score: %d</string>
+    <string name="lives">Lives: %d</string>
     <string name="congratulations">Congratulations!</string>
     <string name="you_scored">"You scored: %d"</string>
     <string name="exit">Exit</string>

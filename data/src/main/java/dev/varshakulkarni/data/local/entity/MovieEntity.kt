@@ -25,7 +25,7 @@ data class MovieEntity(
                     false,
                 ),
                 MovieEntity(
-                    "2001: A Space Odessy",
+                    "2001: A Space Odyssey",
                     "",
                     "",
                     false,

@@ -1,4 +1,4 @@
-package dev.varshakulkarni.moviehangman.ui.theme
+package dev.varshakulkarni.moviehangman.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
