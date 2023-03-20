@@ -1,12 +1,13 @@
 package dev.varshakulkarni.moviehangman.presentation.screens
 
 import android.app.Activity
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -23,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,6 +49,8 @@ fun HangmanContent(
 ) {
     val state by viewModel.state.collectAsState()
 
+    val configuration = LocalConfiguration.current
+
     val alphabets = listOf(
         listOf("a", "b", "c", "d", "e", "f"), listOf("g", "h", "i", "j", "k", "l"),
         listOf("m", "n", "o", "p", "q", "r"), listOf("s", "t", "u", "v", "w", "x"),
@@ -61,30 +65,51 @@ fun HangmanContent(
         backgroundColor = MaterialTheme.colors.background,
 
         content = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                GameStatus(score = state.gameScore, lives = state.lives)
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    GameStatus(score = state.gameScore, lives = state.lives)
 
-                GameString(state.hiddenWord)
+                    GameString(state.hiddenWord)
 
-                HangmanKeyLayout(
-                    viewModel = viewModel,
-                    alphabets, buttonMap
-                )
-
-                HangmanDrawingStatus(state.lives)
-
-                if (state.isGameOver) {
-                    FinalScoreDialog(
-                        score = state.gameScore,
-                        onPlayAgain = {
-                            resetButtons(alphabets, buttonMap)
-                            viewModel.resetGame()
-                        }
+                    HangmanKeyLayout(
+                        viewModel = viewModel,
+                        alphabets, buttonMap
                     )
+
+                    HangmanDrawingStatus(state.lives)
                 }
+            } else {
+                Column(
+
+                ) {
+                    GameStatus(score = state.gameScore, lives = state.lives)
+                    GameString(state.hiddenWord)
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        HangmanKeyLayout(
+                            viewModel = viewModel,
+                            alphabets, buttonMap
+                        )
+
+
+
+                        HangmanDrawingStatus(state.lives)
+
+
+                    }
+                }
+            }
+            if (state.isGameOver) {
+                FinalScoreDialog(
+                    score = state.gameScore,
+                    onPlayAgain = {
+                        resetButtons(alphabets, buttonMap)
+                        viewModel.resetGame()
+                    }
+                )
             }
         })
 }
@@ -99,7 +124,9 @@ fun resetButtons(alphabets: List<List<String>>, buttonMap: HashMap<String, Boole
 
 @Composable
 fun GameString(hiddenWord: String) {
-    Text(text = hiddenWord, letterSpacing = 4.sp, fontSize = 24.sp)
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Text(text = hiddenWord, letterSpacing = 4.sp, fontSize = 24.sp, modifier = Modifier)
+    }
 }
 
 @Composable
@@ -107,8 +134,7 @@ fun GameStatus(score: Int, lives: Int, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .size(48.dp),
+            .padding(8.dp),
     ) {
         Text(
             text = stringResource(R.string.score, score),
