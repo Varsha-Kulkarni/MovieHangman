@@ -8,5 +8,6 @@ data class GameUiState(
     val gameScore: Int = 0,
     val movie: Movie? = null,
     val hiddenWord: String = "",
-    val isGameOver: Boolean = false
+    val isGameOver: Boolean = false,
+    val buttonMap: HashMap<String, Boolean> = HashMap()
 )

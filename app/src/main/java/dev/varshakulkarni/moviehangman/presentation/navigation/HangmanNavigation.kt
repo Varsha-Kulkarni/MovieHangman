@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import dev.varshakulkarni.moviehangman.presentation.screens.HangmanGameScreen
-import dev.varshakulkarni.moviehangman.presentation.screens.MovieInfo
+import dev.varshakulkarni.moviehangman.presentation.screens.GameScreen
+import dev.varshakulkarni.moviehangman.presentation.screens.MovieInfoScreen
 
 @Composable
 fun HangmanNavigation() {
@@ -19,7 +19,7 @@ fun HangmanNavigation() {
     ) {
 
         composable(HangmanScreens.GameScreen.name) {
-            HangmanGameScreen()
+            GameScreen()
         }
 
         composable(
@@ -31,7 +31,7 @@ fun HangmanNavigation() {
         ) { backStackEntry ->
             val title = backStackEntry.arguments?.getString("title")
 
-            MovieInfo(title)
+            MovieInfoScreen(title)
         }
     }
 }

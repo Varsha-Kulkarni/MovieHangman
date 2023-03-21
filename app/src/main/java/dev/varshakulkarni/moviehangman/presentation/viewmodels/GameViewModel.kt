@@ -16,7 +16,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor(val movieDataSource: HangmanDataSource) : ViewModel() {
+class GameViewModel @Inject constructor(private val movieDataSource: HangmanDataSource) :
+    ViewModel() {
 
     private var job: Job? = null
 
@@ -30,12 +31,20 @@ class GameViewModel @Inject constructor(val movieDataSource: HangmanDataSource) 
     private var hiddenWord = ""
     private var lives = 6
     private var isGameOver: Boolean = false
+    private val buttonMap: HashMap<String, Boolean> = HashMap()
 
     init {
         resetGame()
     }
 
     fun resetGame() {
+        val alphabets = listOf(
+            listOf("a", "b", "c", "d", "e", "f"), listOf("g", "h", "i", "j", "k", "l"),
+            listOf("m", "n", "o", "p", "q", "r"), listOf("s", "t", "u", "v", "w", "x"),
+            listOf("y", "z", "1", "2", "3", "4"), listOf("5", "6", "7", "8", "9", "0")
+        )
+
+        resetButtons(alphabets)
 
         job = viewModelScope.launch {
             correctGuesses.clear()
@@ -63,12 +72,21 @@ class GameViewModel @Inject constructor(val movieDataSource: HangmanDataSource) 
                         movie = currentMovie,
                         hiddenWord = hiddenWord,
                         gameScore = gameScore,
-                        lives = lives
+                        lives = lives,
+                        buttonMap = buttonMap
                     )
 
                 }
 
                 movieDataSource.updateMovie(movie)
+            }
+        }
+    }
+
+    fun resetButtons(alphabets: List<List<String>>) {
+        for (row in alphabets) {
+            for (alphabet in row) {
+                buttonMap[alphabet] = true
             }
         }
     }
@@ -94,6 +112,8 @@ class GameViewModel @Inject constructor(val movieDataSource: HangmanDataSource) 
     }
 
     fun checkForAlphabets(alphabet: String) {
+
+        buttonMap[alphabet] = false
 
         if (currentMovie.title.lowercase()
                 .contains(alphabet)
@@ -128,7 +148,8 @@ class GameViewModel @Inject constructor(val movieDataSource: HangmanDataSource) 
                 gameScore = gameScore,
                 isGameOver = isGameOver,
                 lives = lives,
-                hiddenWord = hiddenWord
+                hiddenWord = hiddenWord,
+                buttonMap = buttonMap
             )
 
         }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -33,16 +32,16 @@ private const val HANGMAN_HEIGHT_OFFSET = 3
 private const val ANIMATION_DURATION = 400
 
 @Composable
-fun HangmanParts(numberOfMisses: Int) {
+fun HangmanParts(lives: Int) {
 
-    val animatableHead = remember() { Animatable(0f) }
-    val animatableBody = remember() { Animatable(0f) }
-    val animatableLeftArm = remember() { Animatable(0f) }
-    val animatableRightArm = remember() { Animatable(0f) }
-    val animatableLeftLeg = remember() { Animatable(0f) }
-    val animatableRightLeg = remember() { Animatable(0f) }
+    val animatableHead = Animatable(0f)
+    val animatableBody = Animatable(0f)
+    val animatableLeftArm = Animatable(0f)
+    val animatableRightArm = Animatable(0f)
+    val animatableLeftLeg = Animatable(0f)
+    val animatableRightLeg = Animatable(0f)
 
-    if (numberOfMisses == 5)
+    if (lives == 5)
         LaunchedEffect(animatableHead) {
             animatableHead.animateTo(
                 1f,
@@ -50,7 +49,7 @@ fun HangmanParts(numberOfMisses: Int) {
             )
         }
 
-    if (numberOfMisses == 4)
+    if (lives == 4)
         LaunchedEffect(animatableBody) {
             animatableBody.animateTo(
                 1f,
@@ -58,7 +57,7 @@ fun HangmanParts(numberOfMisses: Int) {
             )
         }
 
-    if (numberOfMisses == 3)
+    if (lives == 3)
         LaunchedEffect(animatableLeftArm) {
             animatableLeftArm.animateTo(
                 1f,
@@ -66,7 +65,7 @@ fun HangmanParts(numberOfMisses: Int) {
             )
         }
 
-    if (numberOfMisses == 2)
+    if (lives == 2)
         LaunchedEffect(animatableRightArm) {
             animatableRightArm.animateTo(
                 1f,
@@ -74,7 +73,7 @@ fun HangmanParts(numberOfMisses: Int) {
             )
         }
 
-    if (numberOfMisses == 1)
+    if (lives == 1)
         LaunchedEffect(animatableLeftLeg) {
             animatableLeftLeg.animateTo(
                 1f,
@@ -82,7 +81,7 @@ fun HangmanParts(numberOfMisses: Int) {
             )
         }
 
-    if (numberOfMisses == 0)
+    if (lives == 0)
         LaunchedEffect(animatableRightLeg) {
             animatableRightLeg.animateTo(
                 1f,
@@ -102,124 +101,200 @@ fun HangmanParts(numberOfMisses: Int) {
                     style = Stroke(2f)
                 )
                 drawLine(
-                    Color.Black,
-                    Offset(
+                    color = Color.Black,
+                    start = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET,
                         (size.height / HANGMAN_HEIGHT_OFFSET + SCAFFOLD_HEIGHT)
                     ),
-                    Offset(
+                    end = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET,
                         size.height / HANGMAN_HEIGHT_OFFSET
                     ),
-                    strokeWidth = 2f,
+                    strokeWidth = 8f,
                 )
                 drawLine(
-                    Color.Black,
-                    Offset(
+                    color = Color.Black,
+                    start = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                         size.height / HANGMAN_HEIGHT_OFFSET
                     ),
-                    Offset(
+                    end = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET,
                         size.height / HANGMAN_HEIGHT_OFFSET
                     ),
-                    strokeWidth = 2f
+                    strokeWidth = 8f
                 )
                 drawLine(
-                    Color.Black,
-                    Offset(
+                    color = Color.Black,
+                    start = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                         size.height / HANGMAN_HEIGHT_OFFSET
                     ),
-                    Offset(
+                    end = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                         size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH
                     ),
-                    strokeWidth = 2f
+                    strokeWidth = 8f
                 )
-                if (numberOfMisses != 6) {
+                if (lives != 6) {
                     drawArc(
                         color = Color.Black,
                         startAngle = 0f,
                         sweepAngle = 360f * animatableHead.value,
                         false,
-                        Offset(
+                        topLeft = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - HEAD_RADIUS,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH
                         ),
-                        Size(
+                        size = Size(
                             HEAD_RADIUS * 2,
                             HEAD_RADIUS * 2
                         ),
-                        style = Stroke(2f)
+                        style = Stroke(8f)
                     )
+                    if (animatableHead.value == 0f && lives <= 4) {
+                        drawArc(
+                            color = Color.Black,
+                            startAngle = 0f,
+                            sweepAngle = 360f,
+                            false,
+                            topLeft = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - HEAD_RADIUS,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH
+                            ),
+                            size = Size(
+                                HEAD_RADIUS * 2,
+                                HEAD_RADIUS * 2
+                            ),
+                            style = Stroke(8f)
+                        )
+                    }
 
                     drawLine(
-                        Color.Black,
-                        Offset(
+                        color = Color.Black,
+                        start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2
                         ),
-                        Offset(
+                        end = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             (size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH * animatableBody.value)
                         ),
-
-
-                        strokeWidth = 2f,
+                        strokeWidth = 8f,
                     )
 
+                    if (animatableBody.value == 0f && lives <= 3) {
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2
+                            ),
+                            end = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                                (size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH)
+                            ),
+                            strokeWidth = 8f,
+                        )
+                    }
+
                     drawLine(
-                        Color.Black,
-                        Offset(
+                        color = Color.Black,
+                        start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
                         ),
-                        Offset(
-                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + ARM_LENGTH * animatableRightArm.value,
-                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE * animatableRightArm.value
-                        ),
-                        strokeWidth = 2f
-                    )
-
-                    drawLine(
-                        Color.Black,
-                        Offset(
-                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
-                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
-                        ),
-                        Offset(
+                        end = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - ARM_LENGTH * animatableLeftArm.value,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE * animatableLeftArm.value
                         ),
-                        strokeWidth = 2f
+                        strokeWidth = 8f
+                    )
+                    if (animatableLeftArm.value == 0f && lives <= 2) {
+
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
+                            ),
+                            end = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - ARM_LENGTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE
+                            ),
+                            strokeWidth = 8f
+                        )
+                    }
+                    drawLine(
+                        color = Color.Black,
+                        start = Offset(
+                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
+                        ),
+                        end = Offset(
+                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + ARM_LENGTH * animatableRightArm.value,
+                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE * animatableRightArm.value
+                        ),
+                        strokeWidth = 8f
                     )
 
+                    if (animatableRightArm.value == 0f && lives <= 1) {
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
+                            ),
+                            end = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + ARM_LENGTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE
+                            ),
+                            strokeWidth = 8f
+                        )
+                    }
+
+
                     drawLine(
-                        Color.Black,
-                        Offset(
+                        color = Color.Black,
+                        start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
                         ),
-                        Offset(
-                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + HIP_WIDTH * animatableRightLeg.value,
-                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE * animatableRightLeg.value
-                        ),
-                        strokeWidth = 2f
-                    )
-
-                    drawLine(
-                        Color.Black,
-                        Offset(
-                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
-                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
-                        ),
-                        Offset(
+                        end = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - HIP_WIDTH * animatableLeftLeg.value,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE * animatableLeftLeg.value
                         ),
-                        strokeWidth = 2f
+                        strokeWidth = 8f
                     )
+
+                    if (animatableLeftLeg.value == 0f && lives == 0) {
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
+                            ),
+                            end = Offset(
+                                size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - HIP_WIDTH,
+                                size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE
+                            ),
+                            strokeWidth = 8f
+                        )
+                    }
+
+                    drawLine(
+                        color = Color.Black,
+                        start = Offset(
+                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
+                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
+                        ),
+                        end = Offset(
+                            size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + HIP_WIDTH * animatableRightLeg.value,
+                            size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE * animatableRightLeg.value
+                        ),
+                        strokeWidth = 8f
+                    )
+
                 }
             })
     }
