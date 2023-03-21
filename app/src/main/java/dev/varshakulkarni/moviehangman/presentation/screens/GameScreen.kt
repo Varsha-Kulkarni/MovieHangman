@@ -19,8 +19,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +33,7 @@ import dev.varshakulkarni.moviehangman.presentation.components.HangmanParts
 import dev.varshakulkarni.moviehangman.presentation.viewmodels.GameViewModel
 
 @Composable
-fun HangmanGameScreen(
+fun GameScreen(
     viewModel: GameViewModel = hiltViewModel()
 ) {
     Column(modifier = Modifier.padding(20.dp)) {
@@ -57,10 +55,6 @@ fun HangmanContent(
         listOf("y", "z", "1", "2", "3", "4"), listOf("5", "6", "7", "8", "9", "0")
     )
 
-    val buttonMap by rememberSaveable { mutableStateOf(HashMap<String, Boolean>()) }
-
-    resetButtons(alphabets, buttonMap)
-
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,
 
@@ -75,23 +69,23 @@ fun HangmanContent(
                     GameString(state.hiddenWord)
 
                     HangmanKeyLayout(
-                        viewModel = viewModel,
-                        alphabets, buttonMap
+                        buttonMap = state.buttonMap,
+                        alphabets = alphabets,
+                        onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
                     )
 
                     HangmanDrawingStatus(state.lives)
                 }
             } else {
-                Column(
-
-                ) {
+                Column {
                     GameStatus(score = state.gameScore, lives = state.lives)
                     GameString(state.hiddenWord)
 
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         HangmanKeyLayout(
-                            viewModel = viewModel,
-                            alphabets, buttonMap
+                            buttonMap = state.buttonMap,
+                            alphabets = alphabets,
+                            onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
                         )
 
 
@@ -106,7 +100,6 @@ fun HangmanContent(
                 FinalScoreDialog(
                     score = state.gameScore,
                     onPlayAgain = {
-                        resetButtons(alphabets, buttonMap)
                         viewModel.resetGame()
                     }
                 )
@@ -114,13 +107,7 @@ fun HangmanContent(
         })
 }
 
-fun resetButtons(alphabets: List<List<String>>, buttonMap: HashMap<String, Boolean>) {
-    for (row in alphabets) {
-        for (alphabet in row) {
-            buttonMap[alphabet] = true
-        }
-    }
-}
+
 
 @Composable
 fun GameString(hiddenWord: String) {
@@ -152,14 +139,15 @@ fun GameStatus(score: Int, lives: Int, modifier: Modifier = Modifier) {
 
 @Composable
 fun HangmanDrawingStatus(lives: Int) {
-    HangmanParts(numberOfMisses = lives)
+    HangmanParts(lives = lives)
 }
 
 @Composable
 fun HangmanKeyLayout(
-    viewModel: GameViewModel,
+    buttonMap: HashMap<String, Boolean>,
     alphabets: List<List<String>>,
-    buttonMap: HashMap<String, Boolean>
+    onKeyPressed: (String) -> Unit
+
 ) {
     Column {
         for (row in alphabets) {
@@ -167,10 +155,7 @@ fun HangmanKeyLayout(
                 for (alphabet in row) {
                     buttonMap[alphabet]?.let {
                         Button(
-                            onClick = {
-                                viewModel.checkForAlphabets(alphabet)
-                                buttonMap[alphabet] = false
-                            },
+                            onClick = { onKeyPressed(alphabet) },
                             enabled = it,
                             colors = ButtonDefaults.outlinedButtonColors(
                                 backgroundColor = Color.White,
