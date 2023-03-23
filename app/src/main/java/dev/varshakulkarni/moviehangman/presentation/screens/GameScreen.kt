@@ -98,6 +98,7 @@ fun HangmanContent(
             }
             if (state.isGameOver) {
                 FinalScoreDialog(
+                    description = state.movie?.description ?: "",
                     score = state.gameScore,
                     onPlayAgain = {
                         viewModel.resetGame()
@@ -173,6 +174,7 @@ fun HangmanKeyLayout(
 
 @Composable
 private fun FinalScoreDialog(
+    description: String,
     score: Int,
     onPlayAgain: () -> Unit,
     modifier: Modifier = Modifier
@@ -186,7 +188,14 @@ private fun FinalScoreDialog(
             // onCloseRequest.
         },
         title = { Text(stringResource(R.string.congratulations)) },
-        text = { Text(stringResource(R.string.you_scored, score)) },
+        text = {
+            Column {
+                Text(stringResource(R.string.you_scored, score))
+                Text(stringResource(id = R.string.movie_detail))
+                Text(stringResource(id = R.string.movie_details, description))
+
+            }
+        },
         modifier = modifier,
         dismissButton = {
             TextButton(
