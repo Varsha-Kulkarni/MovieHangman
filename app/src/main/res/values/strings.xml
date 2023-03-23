@@ -4,6 +4,7 @@
     <string name="lives">Lives: %d</string>
     <string name="congratulations">Congratulations!</string>
     <string name="you_scored">"You scored: %d"</string>
+    <string name="end_game">Awesome! you just proved you are a Movie Geek!</string>
     <string name="exit">Exit</string>
     <string name="play_again">Play Again</string>
     <string name="wrong_guess">Wrong Guess!</string>
