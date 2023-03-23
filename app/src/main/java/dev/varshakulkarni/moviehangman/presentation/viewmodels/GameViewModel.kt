@@ -77,8 +77,6 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
                     )
 
                 }
-
-                movieDataSource.updateMovie(movie)
             }
         }
     }
@@ -129,6 +127,9 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
             if (!hiddenWord.contains('-')) {
                 isGameOver = true
+                viewModelScope.launch {
+                    movieDataSource.updateMovie(currentMovie)
+                }
             }
         } else {
             if (lives >= 1) {

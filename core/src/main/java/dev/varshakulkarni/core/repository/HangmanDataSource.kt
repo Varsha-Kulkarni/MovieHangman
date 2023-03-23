@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface HangmanDataSource {
     fun getMovie(): Flow<Movie>
-    fun updateMovie(movie: Movie): Result<Unit>
+    suspend fun updateMovie(movie: Movie)
 }
