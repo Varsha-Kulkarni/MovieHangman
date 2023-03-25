@@ -75,10 +75,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
                         lives = lives,
                         buttonMap = buttonMap
                     )
-
                 }
-
-                movieDataSource.updateMovie(movie)
             } else {
                 _state.update { currentState ->
                     currentState.copy(
@@ -136,6 +133,9 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
             if (!hiddenWord.contains('-')) {
                 isGameOver = true
+                viewModelScope.launch {
+                    movieDataSource.updateMovie(currentMovie)
+                }
             }
         } else {
             if (lives >= 1) {

@@ -12,7 +12,7 @@ class HangmanRepository @Inject constructor(private val hangmanDao: HangmanDao):
         .map { it?.let { Movie(it.title, it.description, it.media, it.isPlayed) } }
 
 
-    override fun updateMovie(movie: Movie) = runCatching {
+    override suspend fun updateMovie(movie: Movie) {
         hangmanDao.updateMovie(movie.title)
     }
 }
