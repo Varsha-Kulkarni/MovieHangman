@@ -59,6 +59,10 @@ fun HangmanContent(
         backgroundColor = MaterialTheme.colors.background,
 
         content = {
+            if (state.isExhausted) {
+                EndGameDialog()
+            }
+
             if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,12 +91,7 @@ fun HangmanContent(
                             alphabets = alphabets,
                             onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
                         )
-
-
-
                         HangmanDrawingStatus(state.lives)
-
-
                     }
                 }
             }
@@ -209,6 +208,33 @@ private fun FinalScoreDialog(
         confirmButton = {
             TextButton(onClick = onPlayAgain) {
                 Text(text = stringResource(R.string.play_again))
+            }
+        }
+    )
+}
+
+@Composable
+private fun EndGameDialog(
+    modifier: Modifier = Modifier
+) {
+    val activity = (LocalContext.current as Activity)
+
+    AlertDialog(
+        onDismissRequest = {
+            // Dismiss the dialog when the user clicks outside the dialog or on the back
+            // button. If you want to disable that functionality, simply use an empty
+            // onCloseRequest.
+        },
+        title = { Text(stringResource(R.string.congratulations)) },
+        text = { Text(stringResource(R.string.end_game)) },
+        modifier = modifier,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    activity.finish()
+                }
+            ) {
+                Text(text = stringResource(R.string.exit))
             }
         }
     )

@@ -75,7 +75,13 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
                         lives = lives,
                         buttonMap = buttonMap
                     )
-
+                }
+            } else {
+                _state.update { currentState ->
+                    currentState.copy(
+                        isLoading = false,
+                        isExhausted = true
+                    )
                 }
             }
         }
