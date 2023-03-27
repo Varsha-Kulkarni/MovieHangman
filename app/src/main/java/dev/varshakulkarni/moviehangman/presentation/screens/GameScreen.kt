@@ -49,12 +49,6 @@ fun HangmanContent(
 
     val configuration = LocalConfiguration.current
 
-    val alphabets = listOf(
-        listOf("a", "b", "c", "d", "e", "f"), listOf("g", "h", "i", "j", "k", "l"),
-        listOf("m", "n", "o", "p", "q", "r"), listOf("s", "t", "u", "v", "w", "x"),
-        listOf("y", "z", "1", "2", "3", "4"), listOf("5", "6", "7", "8", "9", "0")
-    )
-
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,
 
@@ -63,38 +57,6 @@ fun HangmanContent(
                 EndGameDialog()
             }
 
-            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    GameStatus(score = state.gameScore, lives = state.lives)
-
-                    GameString(state.hiddenWord)
-
-                    HangmanKeyLayout(
-                        buttonMap = state.buttonMap,
-                        alphabets = alphabets,
-                        onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
-                    )
-
-                    HangmanDrawingStatus(state.lives)
-                }
-            } else {
-                Column {
-                    GameStatus(score = state.gameScore, lives = state.lives)
-                    GameString(state.hiddenWord)
-
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        HangmanKeyLayout(
-                            buttonMap = state.buttonMap,
-                            alphabets = alphabets,
-                            onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
-                        )
-                        HangmanDrawingStatus(state.lives)
-                    }
-                }
-            }
             if (state.isGameOver) {
                 FinalScoreDialog(
                     description = state.movie?.description ?: "",
@@ -103,6 +65,35 @@ fun HangmanContent(
                         viewModel.resetGame()
                     }
                 )
+            }
+
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    GameStatus(score = state.gameScore, lives = state.lives)
+                    GameString(state.hiddenWord)
+
+                    InputButtonLayout(
+                        buttonMap = state.buttonMap,
+                        onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
+                    )
+                    HangmanDrawingStatus(state.lives)
+                }
+            } else {
+                Column {
+                    GameStatus(score = state.gameScore, lives = state.lives)
+                    GameString(state.hiddenWord)
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        InputButtonLayout(
+                            buttonMap = state.buttonMap,
+                            onKeyPressed = { alphabet -> viewModel.checkForAlphabets(alphabet) }
+                        )
+                        HangmanDrawingStatus(state.lives)
+                    }
+                }
             }
         })
 }
@@ -143,12 +134,17 @@ fun HangmanDrawingStatus(lives: Int) {
 }
 
 @Composable
-fun HangmanKeyLayout(
+fun InputButtonLayout(
     buttonMap: HashMap<String, Boolean>,
-    alphabets: List<List<String>>,
     onKeyPressed: (String) -> Unit
 
 ) {
+    val alphabets = listOf(
+        listOf("a", "b", "c", "d", "e", "f"), listOf("g", "h", "i", "j", "k", "l"),
+        listOf("m", "n", "o", "p", "q", "r"), listOf("s", "t", "u", "v", "w", "x"),
+        listOf("y", "z", "1", "2", "3", "4"), listOf("5", "6", "7", "8", "9", "0")
+    )
+
     Column {
         for (row in alphabets) {
             Row {
