@@ -3,11 +3,15 @@
     <string name="score">Score: %d</string>
     <string name="lives">Lives: %d</string>
     <string name="congratulations">Congratulations!</string>
+    <string name="well_done">Well Done!</string>
+    <string name="better_luck">Try another one?</string>
+    <string name="keep_trying">Keep trying!</string>
     <string name="you_scored">"You scored: %d"</string>
     <string name="end_game">Awesome! you just proved you are a Movie Geek!</string>
     <string name="movie_detail">Movie Info:</string>
     <string name="movie_details">%s</string>
     <string name="exit">Exit</string>
+    <string name="play">Play</string>
     <string name="play_again">Play Again</string>
     <string name="wrong_guess">Wrong Guess!</string>
 </resources>
