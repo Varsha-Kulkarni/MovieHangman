@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.varshakulkarni.core.model.Movie
 import dev.varshakulkarni.core.repository.HangmanDataSource
 import dev.varshakulkarni.moviehangman.presentation.utils.contains
+import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
 import dev.varshakulkarni.moviehangman.presentation.viewstates.GameUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
     private var lives = 6
     private var isGameOver: Boolean = false
     private val buttonMap: HashMap<String, Boolean> = HashMap()
+    private var gameScoreState: GameScoreState = GameScoreState.StillPlaying
 
     init {
         resetGame()
@@ -53,6 +55,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
             lives = 6
             isGameOver = false
             hiddenWord = ""
+            gameScoreState = GameScoreState.StillPlaying
 
             val movie = movieDataSource.getMovie().firstOrNull()
 
@@ -75,7 +78,8 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
                         hiddenWord = hiddenWord,
                         gameScore = gameScore,
                         lives = lives,
-                        buttonMap = buttonMap
+                        buttonMap = buttonMap,
+                        gameScoreState = gameScoreState
                     )
                 }
             } else {
@@ -137,6 +141,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
             if (!hiddenWord.contains('-')) {
                 isGameOver = true
+                gameScoreState = GameScoreState.Won
             }
         } else {
             if (lives >= 1) {
@@ -147,6 +152,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
         }
         if (lives == 0) {
             isGameOver = true
+            gameScoreState = GameScoreState.Lost
         }
 
         _state.update { currentState ->
@@ -157,7 +163,8 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
                 isGameOver = isGameOver,
                 lives = lives,
                 hiddenWord = hiddenWord,
-                buttonMap = buttonMap
+                buttonMap = buttonMap,
+                gameScoreState = gameScoreState
             )
 
         }

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.varshakulkarni.moviehangman.R
 import dev.varshakulkarni.moviehangman.presentation.components.HangmanParts
+import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
 import dev.varshakulkarni.moviehangman.presentation.viewmodels.GameViewModel
 
 @Composable
@@ -58,9 +59,17 @@ fun HangmanContent(
             }
 
             if (state.isGameOver) {
+                val dialogTitle = if (state.gameScoreState == GameScoreState.Won) listOf(
+                    R.string.congratulations,
+                    R.string.well_done
+                ).random() else listOf(R.string.better_luck, R.string.keep_trying).random()
+                val buttonTitle =
+                    if (state.gameScoreState == GameScoreState.Won) R.string.play_again else R.string.play
                 FinalScoreDialog(
                     description = state.movie?.description ?: "",
                     score = state.gameScore,
+                    dialogTitle = dialogTitle,
+                    buttonTitle = buttonTitle,
                     onPlayAgain = {
                         viewModel.resetGame()
                     }
@@ -169,10 +178,12 @@ fun InputButtonLayout(
 
 @Composable
 private fun FinalScoreDialog(
+    modifier: Modifier = Modifier,
     description: String,
     score: Int,
+    dialogTitle: Int,
     onPlayAgain: () -> Unit,
-    modifier: Modifier = Modifier
+    buttonTitle: Int,
 ) {
     val activity = (LocalContext.current as Activity)
 
@@ -182,7 +193,7 @@ private fun FinalScoreDialog(
             // button. If you want to disable that functionality, simply use an empty
             // onCloseRequest.
         },
-        title = { Text(stringResource(R.string.congratulations)) },
+        title = { Text(text = stringResource(id = dialogTitle)) },
         text = {
             Column {
                 Text(stringResource(R.string.you_scored, score))
@@ -203,7 +214,7 @@ private fun FinalScoreDialog(
         },
         confirmButton = {
             TextButton(onClick = onPlayAgain) {
-                Text(text = stringResource(R.string.play_again))
+                Text(text = stringResource(buttonTitle))
             }
         }
     )
