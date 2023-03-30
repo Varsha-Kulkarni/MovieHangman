@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.varshakulkarni.core.model.Movie
 import dev.varshakulkarni.core.repository.HangmanDataSource
+import dev.varshakulkarni.moviehangman.presentation.utils.contains
 import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
 import dev.varshakulkarni.moviehangman.presentation.viewstates.GameUiState
 import kotlinx.coroutines.Job
@@ -116,7 +117,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
     }
 
     private fun checkIfGuessed(s: String): String {
-        return when (correctGuesses.contains(s)) {
+        return when (correctGuesses.contains(s, true)) {
             true -> s
             false -> "-"
         }
@@ -126,8 +127,8 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
         buttonMap[alphabet] = false
 
-        if (currentMovie.title.lowercase()
-                .contains(alphabet)
+        if (currentMovie.title
+                .contains(alphabet, true)
         ) {
 
             if (alphabet.isNotEmpty() && alphabet.isNotBlank()) {
@@ -136,7 +137,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
             correctGuesses.add(alphabet)
 
-            hiddenWord = refactorHiddenString(currentMovie.title.lowercase())
+            hiddenWord = refactorHiddenString(currentMovie.title)
 
             if (!hiddenWord.contains('-')) {
                 isGameOver = true
