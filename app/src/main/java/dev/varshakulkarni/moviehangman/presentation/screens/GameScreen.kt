@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,6 +69,7 @@ fun HangmanContent(
                 val buttonTitle =
                     if (state.gameScoreState == GameScoreState.Won) R.string.play_again else R.string.play
                 FinalScoreDialog(
+                    title = state.movie?.title ?: "",
                     description = state.movie?.description ?: "",
                     score = state.gameScore,
                     dialogTitle = dialogTitle,
@@ -179,6 +183,7 @@ fun InputButtonLayout(
 @Composable
 private fun FinalScoreDialog(
     modifier: Modifier = Modifier,
+    title: String,
     description: String,
     score: Int,
     dialogTitle: Int,
@@ -186,6 +191,17 @@ private fun FinalScoreDialog(
     buttonTitle: Int,
 ) {
     val activity = (LocalContext.current as Activity)
+
+    val globalText = stringResource(id = R.string.movie_details, description, title)
+
+    val start = globalText.indexOf(title)
+    val spanStyles = listOf(
+        AnnotatedString.Range(
+            SpanStyle(fontWeight = FontWeight.Bold),
+            start = start,
+            end = start + title.length
+        )
+    )
 
     AlertDialog(
         onDismissRequest = {
@@ -198,8 +214,7 @@ private fun FinalScoreDialog(
             Column {
                 Text(stringResource(R.string.you_scored, score))
                 Text(stringResource(id = R.string.movie_detail))
-                Text(stringResource(id = R.string.movie_details, description))
-
+                Text(text = AnnotatedString(text = globalText, spanStyles = spanStyles))
             }
         },
         modifier = modifier,
