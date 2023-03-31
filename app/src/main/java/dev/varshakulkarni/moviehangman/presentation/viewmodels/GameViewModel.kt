@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.varshakulkarni.core.model.Movie
 import dev.varshakulkarni.core.repository.HangmanDataSource
-import dev.varshakulkarni.moviehangman.presentation.utils.contains
 import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
+import dev.varshakulkarni.moviehangman.presentation.utils.contains
 import dev.varshakulkarni.moviehangman.presentation.viewstates.GameUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +35,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
     private var isGameOver: Boolean = false
     private val buttonMap: HashMap<String, Boolean> = HashMap()
     private var gameScoreState: GameScoreState = GameScoreState.StillPlaying
+    private var isExhausted = false
 
     init {
         resetGame()
@@ -56,14 +57,9 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
             isGameOver = false
             hiddenWord = ""
             gameScoreState = GameScoreState.StillPlaying
+            isExhausted = false
 
             val movie = movieDataSource.getMovie().firstOrNull()
-
-            _state.update { currentState ->
-                currentState.copy(
-                    isLoading = true
-                )
-            }
 
             if (movie != null) {
                 currentMovie = movie
@@ -72,21 +68,21 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
                 _state.update { currentState ->
                     currentState.copy(
-                        isLoading = false,
                         isGameOver = isGameOver,
                         movie = currentMovie,
                         hiddenWord = hiddenWord,
                         gameScore = gameScore,
                         lives = lives,
                         buttonMap = buttonMap,
-                        gameScoreState = gameScoreState
+                        gameScoreState = gameScoreState,
+                        isExhausted = isExhausted
                     )
                 }
             } else {
+                isExhausted = true
                 _state.update { currentState ->
                     currentState.copy(
-                        isLoading = false,
-                        isExhausted = true
+                        isExhausted = isExhausted
                     )
                 }
             }
@@ -157,7 +153,6 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
         _state.update { currentState ->
             currentState.copy(
-                isLoading = false,
                 movie = currentMovie,
                 gameScore = gameScore,
                 isGameOver = isGameOver,
