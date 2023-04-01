@@ -30,7 +30,7 @@ interface HangmanDao {
     fun getMovie(): Flow<MovieEntity?>
 
     @Query("UPDATE movie SET isPlayed = 1 WHERE title = :title")
-    fun updateMovie(title: String)
+    suspend fun updateMovie(title: String)
 
     @Query("SELECT * FROM movie WHERE title LIKE :searchQuery OR description LIKE :searchQuery")
     fun searchDatabase(searchQuery: String): Flow<List<MovieEntity>>
