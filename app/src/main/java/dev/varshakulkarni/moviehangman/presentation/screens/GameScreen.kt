@@ -21,7 +21,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -167,8 +166,8 @@ fun InputButtonLayout(
                             onClick = { onKeyPressed(alphabet) },
                             enabled = it,
                             colors = ButtonDefaults.outlinedButtonColors(
-                                backgroundColor = Color.White,
-                                contentColor = Color.DarkGray
+                                backgroundColor = MaterialTheme.colors.background,
+                                contentColor = MaterialTheme.colors.onBackground
                             ),
                         ) {
                             Text(alphabet)

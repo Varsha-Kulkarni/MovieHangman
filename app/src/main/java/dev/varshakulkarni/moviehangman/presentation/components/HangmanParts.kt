@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -31,10 +32,9 @@ private const val HANGMAN_WIDTH_OFFSET = 2.5f
 private const val HANGMAN_HEIGHT_OFFSET = 3
 private const val ANIMATION_DURATION = 400
 private const val STROKE_WIDTH = 8f
-private val COLOR_BODY = Color.Black
 
 @Composable
-fun HangmanParts(lives: Int) {
+fun HangmanParts(lives: Int, bodyColor: Color = MaterialTheme.colors.onBackground) {
 
     val animatableHead = Animatable(0f)
     val animatableBody = Animatable(0f)
@@ -96,14 +96,14 @@ fun HangmanParts(lives: Int) {
         Canvas(modifier = Modifier.fillMaxSize(),
             onDraw = {
                 drawRoundRect(
-                    color = COLOR_BODY,
+                    bodyColor,
                     topLeft = Offset(0f, 36f),
                     size = Size(size.width, size.height - 36f),
                     cornerRadius = CornerRadius(2f, 2f),
                     style = Stroke(2f)
                 )
                 drawLine(
-                    color = COLOR_BODY,
+                    bodyColor,
                     start = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET,
                         (size.height / HANGMAN_HEIGHT_OFFSET + SCAFFOLD_HEIGHT)
@@ -112,10 +112,10 @@ fun HangmanParts(lives: Int) {
                         size.width / HANGMAN_WIDTH_OFFSET,
                         size.height / HANGMAN_HEIGHT_OFFSET
                     ),
-                    strokeWidth = STROKE_WIDTH,
+                    STROKE_WIDTH,
                 )
                 drawLine(
-                    color = COLOR_BODY,
+                    bodyColor,
                     start = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                         size.height / HANGMAN_HEIGHT_OFFSET
@@ -124,10 +124,10 @@ fun HangmanParts(lives: Int) {
                         size.width / HANGMAN_WIDTH_OFFSET,
                         size.height / HANGMAN_HEIGHT_OFFSET
                     ),
-                    strokeWidth = STROKE_WIDTH
+                    STROKE_WIDTH
                 )
                 drawLine(
-                    color = COLOR_BODY,
+                    bodyColor,
                     start = Offset(
                         size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                         size.height / HANGMAN_HEIGHT_OFFSET
@@ -136,11 +136,11 @@ fun HangmanParts(lives: Int) {
                         size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                         size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH
                     ),
-                    strokeWidth = STROKE_WIDTH
+                    STROKE_WIDTH
                 )
                 if (lives != 6) {
                     drawArc(
-                        color = COLOR_BODY,
+                        bodyColor,
                         startAngle = 0f,
                         sweepAngle = 360f * animatableHead.value,
                         false,
@@ -156,7 +156,7 @@ fun HangmanParts(lives: Int) {
                     )
                     if (animatableHead.value == 0f && lives <= 4) {
                         drawArc(
-                            color = COLOR_BODY,
+                            bodyColor,
                             startAngle = 0f,
                             sweepAngle = 360f,
                             false,
@@ -173,7 +173,7 @@ fun HangmanParts(lives: Int) {
                     }
 
                     drawLine(
-                        color = COLOR_BODY,
+                        bodyColor,
                         start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2
@@ -182,11 +182,12 @@ fun HangmanParts(lives: Int) {
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             (size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH * animatableBody.value)
                         ),
-                        strokeWidth = STROKE_WIDTH,
+                        STROKE_WIDTH,
                     )
+
                     if (animatableBody.value == 0f && lives <= 3) {
                         drawLine(
-                            color = COLOR_BODY,
+                            bodyColor,
                             start = Offset(
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2
@@ -195,12 +196,12 @@ fun HangmanParts(lives: Int) {
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                                 (size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH)
                             ),
-                            strokeWidth = STROKE_WIDTH,
+                            STROKE_WIDTH,
                         )
                     }
 
                     drawLine(
-                        color = COLOR_BODY,
+                        bodyColor,
                         start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
@@ -209,12 +210,12 @@ fun HangmanParts(lives: Int) {
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - ARM_LENGTH * animatableLeftArm.value,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE * animatableLeftArm.value
                         ),
-                        strokeWidth = STROKE_WIDTH
+                        STROKE_WIDTH
                     )
                     if (animatableLeftArm.value == 0f && lives <= 2) {
 
                         drawLine(
-                            color = COLOR_BODY,
+                            bodyColor,
                             start = Offset(
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
@@ -223,12 +224,11 @@ fun HangmanParts(lives: Int) {
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - ARM_LENGTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE
                             ),
-                            strokeWidth = STROKE_WIDTH
+                            STROKE_WIDTH
                         )
                     }
-
                     drawLine(
-                        color = COLOR_BODY,
+                        bodyColor,
                         start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
@@ -237,11 +237,12 @@ fun HangmanParts(lives: Int) {
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + ARM_LENGTH * animatableRightArm.value,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE * animatableRightArm.value
                         ),
-                        strokeWidth = STROKE_WIDTH
+                        STROKE_WIDTH
                     )
+
                     if (animatableRightArm.value == 0f && lives <= 1) {
                         drawLine(
-                            color = COLOR_BODY,
+                            bodyColor,
                             start = Offset(
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD
@@ -250,12 +251,13 @@ fun HangmanParts(lives: Int) {
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + ARM_LENGTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + ARM_OFFSET_FROM_HEAD + ARM_ANGLE
                             ),
-                            strokeWidth = STROKE_WIDTH
+                            STROKE_WIDTH
                         )
                     }
 
+
                     drawLine(
-                        color = COLOR_BODY,
+                        bodyColor,
                         start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
@@ -264,11 +266,12 @@ fun HangmanParts(lives: Int) {
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - HIP_WIDTH * animatableLeftLeg.value,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE * animatableLeftLeg.value
                         ),
-                        strokeWidth = STROKE_WIDTH
+                        STROKE_WIDTH
                     )
+
                     if (animatableLeftLeg.value == 0f && lives == 0) {
                         drawLine(
-                            color = COLOR_BODY,
+                            bodyColor,
                             start = Offset(
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
@@ -277,12 +280,12 @@ fun HangmanParts(lives: Int) {
                                 size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH - HIP_WIDTH,
                                 size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE
                             ),
-                            strokeWidth = STROKE_WIDTH
+                            STROKE_WIDTH
                         )
                     }
 
                     drawLine(
-                        color = COLOR_BODY,
+                        bodyColor,
                         start = Offset(
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH
@@ -291,7 +294,7 @@ fun HangmanParts(lives: Int) {
                             size.width / HANGMAN_WIDTH_OFFSET + BEAM_LENGTH + HIP_WIDTH * animatableRightLeg.value,
                             size.height / HANGMAN_HEIGHT_OFFSET + ROPE_LENGTH + HEAD_RADIUS * 2 + BODY_LENGTH + LEG_ANGLE * animatableRightLeg.value
                         ),
-                        strokeWidth = STROKE_WIDTH
+                        STROKE_WIDTH
                     )
 
                 }
