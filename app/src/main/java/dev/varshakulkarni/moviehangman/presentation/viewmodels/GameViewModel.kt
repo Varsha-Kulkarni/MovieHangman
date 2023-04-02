@@ -74,17 +74,25 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
     }
 
     private fun updateState() {
-        _state.update { currentState ->
-            currentState.copy(
-                isGameOver = isGameOver,
-                movie = currentMovie,
-                hiddenWord = hiddenWord,
-                gameScore = gameScore,
-                lives = lives,
-                buttonMap = buttonMap,
-                gameScoreState = gameScoreState,
-                isExhausted = isExhausted
-            )
+        if (isExhausted) {
+            _state.update { currentState ->
+                currentState.copy(
+                    isExhausted = isExhausted
+                )
+            }
+        } else {
+            _state.update { currentState ->
+                currentState.copy(
+                    isGameOver = isGameOver,
+                    movie = currentMovie,
+                    hiddenWord = hiddenWord,
+                    gameScore = gameScore,
+                    lives = lives,
+                    buttonMap = buttonMap,
+                    gameScoreState = gameScoreState,
+                    isExhausted = isExhausted
+                )
+            }
         }
     }
 
