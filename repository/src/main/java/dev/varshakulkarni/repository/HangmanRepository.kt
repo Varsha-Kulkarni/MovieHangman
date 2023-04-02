@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HangmanRepository @Inject constructor(private val hangmanDao: HangmanDao): HangmanDataSource {
-    override fun getMovie(): Flow<Movie?> = hangmanDao.getMovie()
+    override suspend fun getMovie(): Flow<Movie?> = hangmanDao.getMovie()
         .map { it?.let { Movie(it.title, it.description, it.media, it.isPlayed) } }
 
 
