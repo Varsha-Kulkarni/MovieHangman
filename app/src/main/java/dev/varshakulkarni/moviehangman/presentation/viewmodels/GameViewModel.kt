@@ -37,6 +37,9 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
     private var gameScoreState: GameScoreState = GameScoreState.StillPlaying
     private var isExhausted = false
 
+    //Hack to ignore initial null state: still not sure whether StateFlow is the right thing to use here!
+    private var nullCount = 0
+
     init {
         resetGame()
     }
@@ -59,34 +62,57 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
             gameScoreState = GameScoreState.StillPlaying
             isExhausted = false
 
-            val movie = movieDataSource.getMovie().firstOrNull()
+            playWithRandomMovie()
+        }
+    }
 
-            if (movie != null) {
-                currentMovie = movie
-                hiddenWord = refactorHiddenString(movie.title)
-                movieDataSource.updateMovie(currentMovie)
+    private fun playGame(movie: Movie) {
+        currentMovie = movie
+        hiddenWord = refactorHiddenString(movie.title)
 
-                _state.update { currentState ->
-                    currentState.copy(
-                        isGameOver = isGameOver,
-                        movie = currentMovie,
-                        hiddenWord = hiddenWord,
-                        gameScore = gameScore,
-                        lives = lives,
-                        buttonMap = buttonMap,
-                        gameScoreState = gameScoreState,
-                        isExhausted = isExhausted
-                    )
-                }
-            } else {
-                isExhausted = true
-                _state.update { currentState ->
-                    currentState.copy(
-                        isExhausted = isExhausted
-                    )
-                }
+        updateState()
+    }
+
+    private fun updateState() {
+        if (isExhausted) {
+            _state.update { currentState ->
+                currentState.copy(
+                    isExhausted = isExhausted
+                )
+            }
+        } else {
+            _state.update { currentState ->
+                currentState.copy(
+                    isGameOver = isGameOver,
+                    movie = currentMovie,
+                    hiddenWord = hiddenWord,
+                    gameScore = gameScore,
+                    lives = lives,
+                    buttonMap = buttonMap,
+                    gameScoreState = gameScoreState,
+                    isExhausted = isExhausted
+                )
             }
         }
+    }
+
+    private suspend fun playWithRandomMovie() {
+        val movie = movieDataSource.getMovie().firstOrNull()
+        if (movie == null) {
+            nullCount++
+            if (nullCount > 1)
+                gameExhausted()
+            else
+                playWithRandomMovie()
+        } else {
+            movieDataSource.updateMovie(movie)
+            playGame(movie)
+        }
+    }
+
+    private fun gameExhausted() {
+        isExhausted = true
+        updateState()
     }
 
     private fun resetButtons(alphabets: List<List<String>>) {
@@ -151,18 +177,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
             gameScoreState = GameScoreState.Lost
         }
 
-        _state.update { currentState ->
-            currentState.copy(
-                movie = currentMovie,
-                gameScore = gameScore,
-                isGameOver = isGameOver,
-                lives = lives,
-                hiddenWord = hiddenWord,
-                buttonMap = buttonMap,
-                gameScoreState = gameScoreState
-            )
-
-        }
+        updateState()
     }
 
     override fun onCleared() {
