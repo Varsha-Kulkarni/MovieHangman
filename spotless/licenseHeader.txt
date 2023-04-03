@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Varsha Kulkarni
+ * Copyright $YEAR Varsha Kulkarni
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.core.repository
-
-import dev.varshakulkarni.core.model.Movie
-import kotlinx.coroutines.flow.Flow
-
-interface HangmanDataSource {
-    suspend fun getMovie(): Flow<Movie?>
-    suspend fun updateMovie(movie: Movie)
-}
