@@ -19,9 +19,9 @@ The state changes are passed down to the UI for updates.
 
 The architecture of the app follows recommended [App Architecture principles](https://developer.android.com/topic/architecture)
 
-The classic Hangman is drawn using Compose Animations based on lives left. 
-
 <img src="/results/Architecture.png" width="260">
+
+The classic Hangman is drawn using Compose Animations based on lives left. 
 
 ## Illustrations
 
