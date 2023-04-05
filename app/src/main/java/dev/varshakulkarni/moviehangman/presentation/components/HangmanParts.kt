@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -50,12 +51,12 @@ private const val STROKE_WIDTH = 8f
 @Composable
 fun HangmanParts(lives: Int, bodyColor: Color = MaterialTheme.colors.onBackground) {
 
-    val animatableHead = Animatable(0f)
-    val animatableBody = Animatable(0f)
-    val animatableLeftArm = Animatable(0f)
-    val animatableRightArm = Animatable(0f)
-    val animatableLeftLeg = Animatable(0f)
-    val animatableRightLeg = Animatable(0f)
+    val animatableHead = remember { Animatable(0f) }
+    val animatableBody = remember { Animatable(0f) }
+    val animatableLeftArm = remember { Animatable(0f) }
+    val animatableRightArm = remember { Animatable(0f) }
+    val animatableLeftLeg = remember { Animatable(0f) }
+    val animatableRightLeg = remember { Animatable(0f) }
 
     if (lives == 5)
         LaunchedEffect(animatableHead) {
