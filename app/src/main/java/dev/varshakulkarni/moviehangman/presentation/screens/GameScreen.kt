@@ -44,7 +44,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.varshakulkarni.moviehangman.R
 import dev.varshakulkarni.moviehangman.presentation.components.HangmanParts
 import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
@@ -52,7 +52,7 @@ import dev.varshakulkarni.moviehangman.presentation.viewmodels.GameViewModel
 
 @Composable
 fun GameScreen(
-    viewModel: GameViewModel = hiltViewModel()
+    viewModel: GameViewModel = viewModel()
 ) {
     Column(modifier = Modifier.padding(20.dp)) {
         HangmanContent(viewModel)
