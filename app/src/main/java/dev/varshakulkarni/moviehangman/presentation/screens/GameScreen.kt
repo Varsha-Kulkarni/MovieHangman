@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.varshakulkarni.moviehangman.R
-import dev.varshakulkarni.moviehangman.presentation.components.HangmanParts
+import dev.varshakulkarni.moviehangman.presentation.components.HangmanBody
 import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
 import dev.varshakulkarni.moviehangman.presentation.viewmodels.GameViewModel
 
@@ -156,7 +156,7 @@ fun GameStatus(score: Int, lives: Int, modifier: Modifier = Modifier) {
 
 @Composable
 fun HangmanDrawingStatus(lives: Int) {
-    HangmanParts(lives = lives)
+    HangmanBody(lives = lives)
 }
 
 @Composable

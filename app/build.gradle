@@ -16,10 +16,10 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+        testInstrumentationRunner "dev.varshakulkarni.moviehangman.CustomTestRunner"
 
         kapt {
             arguments {
@@ -73,6 +73,8 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$composeUiVersion"
     debugImplementation "androidx.compose.ui:ui-tooling:$composeUiVersion"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$composeUiVersion"
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$daggerHiltVersion"
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
 

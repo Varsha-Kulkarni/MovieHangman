@@ -32,6 +32,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 
 private const val SCAFFOLD_HEIGHT = 360f
 private const val BEAM_LENGTH = 144f
@@ -49,7 +51,7 @@ private const val ANIMATION_DURATION = 400
 private const val STROKE_WIDTH = 8f
 
 @Composable
-fun HangmanParts(lives: Int, bodyColor: Color = MaterialTheme.colors.onBackground) {
+fun HangmanBody(lives: Int, bodyColor: Color = MaterialTheme.colors.onBackground) {
 
     val animatableHead = remember { Animatable(0f) }
     val animatableBody = remember { Animatable(0f) }
@@ -109,7 +111,9 @@ fun HangmanParts(lives: Int, bodyColor: Color = MaterialTheme.colors.onBackgroun
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
         Canvas(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .semantics { contentDescription = "HangmanBody" },
             onDraw = {
                 drawRoundRect(
                     bodyColor,
