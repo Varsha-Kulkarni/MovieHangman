@@ -18,6 +18,7 @@ package dev.varshakulkarni.moviehangman
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -81,14 +82,16 @@ class GameScreenTest {
         assertStringDisplayed("Score: 80")
     }
 
-    private fun clickOnKey(key: String) =
+    private fun clickOnKey(key: String) {
         composeTestRule
             .onNodeWithText(key, useUnmergedTree = true)
             .performClick()
 
-    private fun assertStringDisplayed(string: String) {
-        composeTestRule.onNodeWithText(string, ignoreCase = true).assertIsDisplayed()
+        composeTestRule.onNodeWithText(key, ignoreCase = true).assertIsNotEnabled()
     }
+
+    private fun assertStringDisplayed(string: String) =
+        composeTestRule.onNodeWithText(string, ignoreCase = true).assertIsDisplayed()
 
     private fun resetButtons() {
         val alphabets = listOf(
