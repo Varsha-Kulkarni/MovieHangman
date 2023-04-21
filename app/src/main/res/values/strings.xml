@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Movie Hangman</string>
-    <string name="score">Score: %d</string>
+    <string name="current_score">Current Score: %d</string>
+    <string name="high_score">High Score: %d</string>
+    <string name="current_streak">Current Streak: %d</string>
+    <string name="longest_streak">Longest Streak: %d</string>
     <string name="lives">Lives: %d</string>
     <string name="congratulations">Congratulations!</string>
     <string name="well_done">Well Done!</string>
@@ -11,7 +14,7 @@
     <string name="movie_detail">Movie Info:</string>
     <string name="movie_details">%s</string>
     <string name="exit">Exit</string>
-    <string name="play">Play</string>
-    <string name="play_again">Play Again</string>
+    <string name="play">Play Again!</string>
+    <string name="play_again">Continue!</string>
     <string name="wrong_guess">Wrong Guess!</string>
 </resources>

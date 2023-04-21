@@ -20,11 +20,15 @@ import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
 
 data class GameUiState(
     val lives: Int = 6,
-    val gameScore: Int = 0,
+    val currentScore: Int = 0,
+    val highScore: Int = 0,
     val movie: Movie? = null,
     val hiddenWord: String = "",
     val isGameOver: Boolean = false,
     val buttonMap: HashMap<String, Boolean> = HashMap(),
     val isExhausted: Boolean = false,
+    val highestWinningStreak: Int = 0,
+    val currentWinningStreak: Int = 0,
+    val previous: Int = 0,
     val gameScoreState: GameScoreState = GameScoreState.StillPlaying,
 )

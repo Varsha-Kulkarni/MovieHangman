@@ -44,13 +44,17 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
     val state: StateFlow<GameUiState> = _state.asStateFlow()
 
     private val correctGuesses = mutableListOf<String>()
-    private var gameScore = 0
+    private var currentScore = 0
     private var hiddenWord = ""
     private var lives = 6
     private var isGameOver: Boolean = false
     private val buttonMap: HashMap<String, Boolean> = HashMap()
     private var gameScoreState: GameScoreState = GameScoreState.StillPlaying
     private var isExhausted = false
+    private var currentWinningStreak = 0
+    private var highestWinningStreak = 0
+    private var highScore = 0
+    private var previous = 0
 
     // Hack to ignore initial null state: still not sure whether StateFlow is the right thing to use here!
     private var nullCount = 0
@@ -70,8 +74,6 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
         job = viewModelScope.launch {
             correctGuesses.clear()
-            gameScore = 0
-            lives = 6
             isGameOver = false
             hiddenWord = ""
             gameScoreState = GameScoreState.StillPlaying
@@ -101,11 +103,15 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
                     isGameOver = isGameOver,
                     movie = currentMovie,
                     hiddenWord = hiddenWord,
-                    gameScore = gameScore,
+                    currentScore = currentScore,
                     lives = lives,
                     buttonMap = buttonMap,
                     gameScoreState = gameScoreState,
-                    isExhausted = isExhausted
+                    isExhausted = isExhausted,
+                    currentWinningStreak = currentWinningStreak,
+                    highestWinningStreak = highestWinningStreak,
+                    previous = previous,
+                    highScore = highScore
                 )
             }
         }
@@ -169,7 +175,7 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
         ) {
 
             if (alphabet.isNotEmpty() && alphabet.isNotBlank()) {
-                gameScore += 10
+                currentScore += 10
             }
 
             correctGuesses.add(alphabet)
@@ -178,18 +184,31 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
 
             if (!hiddenWord.contains('-')) {
                 isGameOver = true
+                currentWinningStreak++
+                if (lives < 6) lives++
                 gameScoreState = GameScoreState.Won
+                highestWinningStreak = currentWinningStreak
+                highScore = currentScore
+                previous = currentScore
             }
         } else {
             if (lives >= 1) {
                 lives--
-                if (gameScore != 0)
-                    gameScore -= 5
+                if (currentScore != 0)
+                    currentScore -= 5
             }
         }
         if (lives == 0) {
             isGameOver = true
             gameScoreState = GameScoreState.Lost
+            if (highestWinningStreak < currentWinningStreak)
+                highestWinningStreak = currentWinningStreak
+            currentWinningStreak = 0
+            previous = currentScore
+            if (highScore < currentScore)
+                highScore = currentScore
+            currentScore = 0
+            lives = 6
         }
 
         updateState()

@@ -21,9 +21,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -85,7 +85,7 @@ fun HangmanContent(
                 FinalScoreDialog(
                     title = state.movie?.title ?: "",
                     description = state.movie?.description ?: "",
-                    score = state.gameScore,
+                    score = state.previous,
                     dialogTitle = dialogTitle,
                     buttonTitle = buttonTitle,
                     onPlayAgain = {
@@ -97,9 +97,16 @@ fun HangmanContent(
             if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.padding(it)
                 ) {
-                    GameStatus(score = state.gameScore, lives = state.lives)
+                    GameStatus(
+                        currentScore = state.currentScore,
+                        highestScore = state.highScore,
+                        currentStreak = state.currentWinningStreak,
+                        longestStreak = state.highestWinningStreak,
+                        lives = state.lives
+                    )
                     GameString(state.hiddenWord)
 
                     InputButtonLayout(
@@ -109,8 +116,17 @@ fun HangmanContent(
                     HangmanDrawingStatus(state.lives)
                 }
             } else {
-                Column {
-                    GameStatus(score = state.gameScore, lives = state.lives)
+                Column(
+                    modifier = Modifier.padding(it)
+                ) {
+                    GameStatus(
+                        currentScore = state.currentScore,
+                        highestScore = state.highScore,
+                        currentStreak = state.currentWinningStreak,
+                        longestStreak = state.highestWinningStreak,
+                        lives = state.lives
+                    )
+                    Spacer(modifier = Modifier.padding(8.dp))
                     GameString(state.hiddenWord)
 
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -134,23 +150,68 @@ fun GameString(hiddenWord: String) {
 }
 
 @Composable
-fun GameStatus(score: Int, lives: Int, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.score, score),
-            fontSize = 12.sp,
-        )
-        Text(
-            text = stringResource(R.string.lives, lives),
-            fontSize = 12.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth(Alignment.End),
-        )
+fun GameStatus(
+    currentScore: Int,
+    highestScore: Int,
+    currentStreak: Int,
+    longestStreak: Int,
+    lives: Int,
+    modifier: Modifier = Modifier
+) {
+    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Column {
+                Text(
+                    text = stringResource(R.string.current_score, currentScore),
+                    fontSize = 12.sp,
+                )
+                Text(
+                    text = stringResource(R.string.high_score, highestScore),
+                    fontSize = 12.sp,
+                )
+            }
+            Text(
+                text = stringResource(R.string.lives, lives),
+                fontSize = 12.sp,
+            )
+            Column {
+                Text(
+                    text = stringResource(R.string.current_streak, currentStreak),
+                    fontSize = 12.sp,
+                )
+                Text(
+                    text = stringResource(R.string.longest_streak, longestStreak),
+                    fontSize = 12.sp,
+                )
+            }
+        }
+    } else {
+
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            Text(
+                text = stringResource(R.string.current_score, currentScore),
+                fontSize = 12.sp,
+            )
+            Text(
+                text = stringResource(R.string.high_score, highestScore),
+                fontSize = 12.sp,
+            )
+            Text(
+                text = stringResource(R.string.lives, lives),
+                fontSize = 12.sp,
+            )
+            Text(
+                text = stringResource(R.string.current_streak, currentStreak),
+                fontSize = 12.sp,
+            )
+            Text(
+                text = stringResource(R.string.longest_streak, longestStreak),
+                fontSize = 12.sp,
+            )
+        }
     }
 }
 
