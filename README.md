@@ -12,8 +12,10 @@ Classic Movie Hangman Game built using Jetpack Compose. This demonstrates [Moder
 Click on any key on the Button Layout sends event to ViewModel to handle. The event handlers in ViewModel take appropriate actions and update the state when required:
 - A life is lost on wrong guess, minus score 
 - Increment the score for guessing it right
-- Finish the game when no more lives left or movie is guessed
-- Game exhausts when no more movie is left to guess
+- Add a life when a movie is guessed
+- Keep playing until all lives lost
+- Start a new game 
+- Game (app) exhausts when no more movie is left to guess
 
 The state changes are passed down to the UI for updates.
 
