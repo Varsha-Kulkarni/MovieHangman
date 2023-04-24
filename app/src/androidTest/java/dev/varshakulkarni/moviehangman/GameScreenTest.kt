@@ -24,9 +24,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dev.varshakulkarni.moviehangman.presentation.screens.GameScreen
-import dev.varshakulkarni.moviehangman.presentation.ui.theme.MovieHangmanTheme
-import dev.varshakulkarni.moviehangman.presentation.viewmodels.GameViewModel
+import dev.varshakulkarni.moviehangman.screens.GameScreen
+import dev.varshakulkarni.moviehangman.theme.MovieHangmanTheme
+import dev.varshakulkarni.moviehangman.viewmodels.GameViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

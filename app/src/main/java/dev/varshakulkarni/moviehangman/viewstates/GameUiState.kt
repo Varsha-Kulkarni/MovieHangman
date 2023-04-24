@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.viewstates
+package dev.varshakulkarni.moviehangman.viewstates
 
 import dev.varshakulkarni.core.model.Movie
-import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
+import dev.varshakulkarni.moviehangman.utils.GameScoreState
 
 data class GameUiState(
     val lives: Int = 6,

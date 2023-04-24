@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.screens
+package dev.varshakulkarni.moviehangman.screens
 
 import android.app.Activity
 import android.content.res.Configuration
@@ -46,9 +46,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.varshakulkarni.moviehangman.R
-import dev.varshakulkarni.moviehangman.presentation.components.HangmanBody
-import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
-import dev.varshakulkarni.moviehangman.presentation.viewmodels.GameViewModel
+import dev.varshakulkarni.moviehangman.components.HangmanBody
+import dev.varshakulkarni.moviehangman.utils.GameScoreState
+import dev.varshakulkarni.moviehangman.viewmodels.GameViewModel
 
 @Composable
 fun GameScreen(
@@ -266,9 +266,9 @@ private fun FinalScoreDialog(
 ) {
     val activity = (LocalContext.current as Activity)
 
-    val globalText = stringResource(id = R.string.movie_details, description, title)
+    val boldText = stringResource(id = R.string.movie_details, description, title)
 
-    val start = globalText.indexOf(title)
+    val start = boldText.indexOf(title)
     val spanStyles = listOf(
         AnnotatedString.Range(
             SpanStyle(fontWeight = FontWeight.Bold),
@@ -288,7 +288,7 @@ private fun FinalScoreDialog(
             Column {
                 Text(stringResource(R.string.you_scored, score))
                 Text(stringResource(id = R.string.movie_detail))
-                Text(text = AnnotatedString(text = globalText, spanStyles = spanStyles))
+                Text(text = AnnotatedString(text = boldText, spanStyles = spanStyles))
             }
         },
         modifier = modifier,

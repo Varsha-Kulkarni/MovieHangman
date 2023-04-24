@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.viewmodels
+package dev.varshakulkarni.moviehangman.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.varshakulkarni.core.model.Movie
 import dev.varshakulkarni.core.repository.HangmanDataSource
-import dev.varshakulkarni.moviehangman.presentation.utils.GameScoreState
-import dev.varshakulkarni.moviehangman.presentation.utils.contains
-import dev.varshakulkarni.moviehangman.presentation.viewstates.GameUiState
+import dev.varshakulkarni.moviehangman.utils.GameScoreState
+import dev.varshakulkarni.moviehangman.utils.contains
+import dev.varshakulkarni.moviehangman.viewstates.GameUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -79,6 +79,10 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
             gameScoreState = GameScoreState.StillPlaying
             isExhausted = false
 
+            if (currentWinningStreak == 0) {
+                currentScore = 0
+                lives = 6
+            }
             playWithRandomMovie()
         }
     }
@@ -207,8 +211,6 @@ class GameViewModel @Inject constructor(private val movieDataSource: HangmanData
             previous = currentScore
             if (highScore < currentScore)
                 highScore = currentScore
-            currentScore = 0
-            lives = 6
         }
 
         updateState()

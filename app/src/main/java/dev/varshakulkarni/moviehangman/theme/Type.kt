@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.ui.theme
+package dev.varshakulkarni.moviehangman.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

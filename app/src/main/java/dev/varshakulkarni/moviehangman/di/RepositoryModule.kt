@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.ui.theme
+package dev.varshakulkarni.moviehangman.di
 
-import androidx.compose.ui.graphics.Color
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import dev.varshakulkarni.core.repository.HangmanDataSource
+import dev.varshakulkarni.repository.HangmanRepository
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindsHangmanRepository(hangmanRepository: HangmanRepository): HangmanDataSource
+}
