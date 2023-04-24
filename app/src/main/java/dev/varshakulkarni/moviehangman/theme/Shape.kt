@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.utils
+package dev.varshakulkarni.moviehangman.theme
 
-fun List<String>.contains(s: String, ignoreCase: Boolean = true): Boolean {
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Shapes
+import androidx.compose.ui.unit.dp
 
-    return any { it.equals(s, ignoreCase) }
-}
+val Shapes = Shapes(
+    small = RoundedCornerShape(4.dp),
+    medium = RoundedCornerShape(4.dp),
+    large = RoundedCornerShape(0.dp)
+)

@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.varshakulkarni.moviehangman.presentation.components
+package dev.varshakulkarni.moviehangman.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -49,8 +50,14 @@ private const val HANGMAN_HEIGHT_OFFSET = 3
 private const val ANIMATION_DURATION = 400
 private const val STROKE_WIDTH = 8f
 
+@SuppressLint("UnrememberedAnimatable")
 @Composable
 fun HangmanBody(lives: Int, bodyColor: Color = MaterialTheme.colors.onBackground) {
+
+    /* Lint Error:Creating an Animatable during composition without using `remember`
+    * This is required because the Hangman body has to redraw with every change in Game Lives
+    * If it is cached, then it will not redraw during new Game
+    * Hack for clearing the canvas! */
 
     val animatableHead = Animatable(0f)
     val animatableBody = Animatable(0f)
