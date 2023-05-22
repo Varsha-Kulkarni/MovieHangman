@@ -13,10 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieHangman"
         tools:targetApi="31">
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.MovieHangman">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
